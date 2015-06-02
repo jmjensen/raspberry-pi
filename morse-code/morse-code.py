@@ -100,7 +100,7 @@ print("Ready")
 # Contact Key Screen Test #
 ########################### 
 
-if ops_mode = "1":
+if ops_mode == "1":
     while True:
         reading = GPIO.input(pin)
         print("HIGH" if reading else "LOW")
