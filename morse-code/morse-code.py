@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+# Program for using a contact key with an RPi.  It involves wiring a contact key to pins 6 & 7 and pull up wiring.
+# It has 4 different operation modes.
+# TODO: Logging
+#       Connect to FM Transmitter
+
 ###########
 # Imports #
 ###########
