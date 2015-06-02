@@ -23,3 +23,9 @@ class ToneSound(pygame.mixer.Sound):
             else:
                 samples[time] = -amplitude
         return samples
+
+tone_obj = ToneSound(frequency = 800, volume = .5)
+
+tone_obj.play(-1) #the -1 means to loop the sound
+time.sleep(2)
+tone_obj.stop()
