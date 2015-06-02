@@ -16,17 +16,6 @@ pin = 7
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-#########
-# Setup #
-#########
-pygame.mixer.pre_init(44100, -16, 1, 1024)
-pygame.init()
-tone_obj = ToneSound(frequency = 800, volume = .5)
-DOT = "."
-DASH = "-"
-key_down_time=0
-key_down_length=0
-
 class ToneSound(pygame.mixer.Sound):
     def __init__(self, frequency, volume):
         self.frequency = frequency
@@ -51,7 +40,17 @@ def wait_for_keydown(pin):
 def wait_for_keyup(pin):
     while not GPIO.input(pin):
         time.sleep(0.01)
-		
+
+#########
+# Setup #
+#########
+pygame.mixer.pre_init(44100, -16, 1, 1024)
+pygame.init()
+tone_obj = ToneSound(frequency = 800, volume = .5)
+DOT = "."
+DASH = "-"
+key_down_time=0
+key_down_length=0		
 		
 
 
