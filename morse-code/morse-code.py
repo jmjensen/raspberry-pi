@@ -15,7 +15,7 @@ from morse_lookup import *
 ###########
 # Options #
 ###########
-parser = OptionParser(usage="%prog -f data_file [-h]", version="1")
+parser = OptionParser(usage="%prog [-h]", version="1")
 parser.add_option("-m", "--mode", dest="mode", type="string", action="store", default="4", help="Operation mode.  1 = Contact Key Test, 2 = Tone only, 3 = Display Morse, 4 = Decode Morse.  Default = 5")
 (options, args) = parser.parse_args()
 ##########
@@ -81,6 +81,7 @@ key_down_time=0
 key_down_length=0
 key_up_time = 0
 buffer = []
+mode = options.mode
 
 ##################################
 # Plays test tone upon execution #
