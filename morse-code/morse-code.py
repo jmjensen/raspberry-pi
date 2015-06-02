@@ -1,12 +1,31 @@
 #!/usr/bin/python
+
+###########
+# Imports #
+###########
 import pygame
 import time
 from RPi import GPIO
 from array import array
 from pygame.locals import *
 
+##############
+# GPIO Setup #
+##############
+pin = 7
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+#########
+# Setup #
+#########
 pygame.mixer.pre_init(44100, -16, 1, 1024)
 pygame.init()
+tone_obj = ToneSound(frequency = 800, volume = .5)
+DOT = "."
+DASH = "-"
+key_down_time=0
+key_down_length=0
 
 class ToneSound(pygame.mixer.Sound):
     def __init__(self, frequency, volume):
@@ -34,7 +53,7 @@ def wait_for_keyup(pin):
         time.sleep(0.01)
 		
 		
-tone_obj = ToneSound(frequency = 800, volume = .5)
+
 
 ##################################
 # Plays test tone upon execution #
@@ -42,13 +61,6 @@ tone_obj = ToneSound(frequency = 800, volume = .5)
 tone_obj.play(-1) #the -1 means to loop the sound
 time.sleep(2)
 tone_obj.stop()
-
-##############
-# GPIO Setup #
-##############
-pin = 7
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 print("Ready")
 
@@ -60,12 +72,29 @@ print("Ready")
 	# print("HIGH" if reading else "LOW")
 	# time.sleep(1)
 
-##########################
-# Tone on Button Press:  #
-#      Pull Up Wiring    #
-##########################
+#########################
+# Tone on Button Press: #
+#     Pull Up Wiring    #
+#########################
+# while True:
+	# wait_for_keydown(pin)
+	# tone_obj.play(-1) 		# -1 means to loop the sound 
+	# wait_for_keyup(pin)
+	# tone_obj.stop()
+	
+################################
+# Display Morse and Play Tone: #
+#     Pull Up Wiring           #
+################################
 while True:
-	wait_for_keydown(pin)
-	tone_obj.play(-1) 		# -1 means to loop the sound 
-	wait_for_keyup(pin)
-	tone_obj.stop()
+    wait_for_keydown(pin)
+	key_down_time = time.time() # record the time when the key went down
+    tone_obj.play(-1)           # -1 means to loop the sound
+    wait_for_keyup(pin)
+    key_down_length = time.time() - key_down_time 
+    tone_obj.stop()
+    
+    if key_down_length > 0.15:
+        print(DASH)
+    else:
+        print(DOT)
