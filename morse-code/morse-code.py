@@ -88,7 +88,7 @@ print("Ready")
 ################################
 while True:
     wait_for_keydown(pin)
-	key_down_time = time.time() # record the time when the key went down
+    key_down_time = time.time() # record the time when the key went down
     tone_obj.play(-1)           # -1 means to loop the sound
     wait_for_keyup(pin)
     key_down_length = time.time() - key_down_time 
