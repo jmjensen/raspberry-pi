@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import pygame
 import time
+from RPi import GPIO
 from array import array
 from pygame.locals import *
 
@@ -26,6 +27,24 @@ class ToneSound(pygame.mixer.Sound):
 
 tone_obj = ToneSound(frequency = 800, volume = .5)
 
-tone_obj.play(-1) #the -1 means to loop the sound
-time.sleep(2)
-tone_obj.stop()
+##################################
+# Plays test tone upon execution #
+##################################
+# tone_obj.play(-1) #the -1 means to loop the sound
+# time.sleep(2)
+# tone_obj.stop()
+
+##############
+# GPIO Setup #
+##############
+pin = 7
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+###########################
+# Contact Key Screen Test #
+###########################
+while True:
+	reading = GPIO.input(pin)
+	print("HIGH" if reading else "LOW")
+	time.sleep(1)
