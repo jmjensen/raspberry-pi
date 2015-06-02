@@ -7,9 +7,18 @@ import pygame
 import time
 from RPi import GPIO
 import thread
+from optparse import OptionParser
 from array import array
 from pygame.locals import *
 from morse_lookup import *
+
+###########
+# Options #
+###########
+parser = OptionParser(usage="%prog -f data_file [-h]", version="1")
+parser.add_option("-m", "--mode", dest="mode", type="string", action="store", default="4", help="Operation mode.  1 = Contact Key Test, 2 = Tone only, 3 = Display Morse, 4 = Decode Morse.  Default = 5")
+(options, args) = parser.parse_args()
+##########
 
 ##################
 # Hardware Setup #
@@ -80,11 +89,6 @@ tone_obj.play(-1) #the -1 means to loop the sound
 time.sleep(2)
 tone_obj.stop()
 
-####################
-# Start new thread #
-####################
-thread.start_new_thread(decoder_thread, ())
-
 print("Ready")
 
 #####################################################
@@ -94,48 +98,61 @@ print("Ready")
 ###########################
 # Contact Key Screen Test #
 ########################### 
-# while True:
-	# reading = GPIO.input(pin)
-	# print("HIGH" if reading else "LOW")
-	# time.sleep(1)
+
+if mode == "1":
+    while True:
+        reading = GPIO.input(pin)
+        print("HIGH" if reading else "LOW")
+        time.sleep(1)
 
 #########################
 # Tone on Button Press: #
 #     Pull Up Wiring    #
 #########################
-# while True:
-	# wait_for_keydown(pin)
-	# tone_obj.play(-1) 		# -1 means to loop the sound 
-	# wait_for_keyup(pin)
-	# tone_obj.stop()
+elif mode == "2":
+    while True:
+        wait_for_keydown(pin)
+        tone_obj.play(-1) 		# -1 means to loop the sound 
+        wait_for_keyup(pin)
+        tone_obj.stop()
 	
 ################################
 # Display Morse and Play Tone: #
 #     Pull Up Wiring           #
 ################################
-# while True:
-    # wait_for_keydown(pin)
-    # key_down_time = time.time() # record the time when the key went down
-    # tone_obj.play(-1)           # -1 means to loop the sound
-    # wait_for_keyup(pin)
-    # key_down_length = time.time() - key_down_time 
-    # tone_obj.stop()
-    
-    # if key_down_length > 0.15:
-        # print(DASH)
-    # else:
-        # print(DOT)
+elif mode == "3":
+    while True:
+        wait_for_keydown(pin)
+        key_down_time = time.time() # record the time when the key went down
+        tone_obj.play(-1)           # -1 means to loop the sound
+        wait_for_keyup(pin)
+        key_down_length = time.time() - key_down_time 
+        tone_obj.stop()
+        
+        if key_down_length > 0.15:
+            print(DASH)
+        else:
+            print(DOT)
         
 ###############################
 # Decode Morse and Play Tone: #
 #     Pull Up Wiring          #
 ###############################
-while True:
-    wait_for_keydown(pin)
-    key_down_time = time.time() # record the time when the key went down
-    tone_obj.play(-1)           # -1 means to loop the sound
-    wait_for_keyup(pin)
-    key_up_time = time.time()   # record the tiem when the key was released
-    key_down_length = time.time() - key_down_time 
-    tone_obj.stop()
-    buffer.append(DASH if key_down_length > 0.15 else DOT)
+elif mode == "4":
+
+    ####################
+    # Start new thread #
+    ####################
+    thread.start_new_thread(decoder_thread, ())
+
+    while True:
+        wait_for_keydown(pin)
+        key_down_time = time.time() # record the time when the key went down
+        tone_obj.play(-1)           # -1 means to loop the sound
+        wait_for_keyup(pin)
+        key_up_time = time.time()   # record the tiem when the key was released
+        key_down_length = time.time() - key_down_time 
+        tone_obj.stop()
+        buffer.append(DASH if key_down_length > 0.15 else DOT)
+else:
+    print("Unrecognized Mode")
