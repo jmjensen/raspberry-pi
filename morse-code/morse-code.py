@@ -81,7 +81,7 @@ key_down_time=0
 key_down_length=0
 key_up_time = 0
 buffer = []
-mode = options.mode
+ops_mode = options.mode
 
 ##################################
 # Plays test tone upon execution #
@@ -100,7 +100,7 @@ print("Ready")
 # Contact Key Screen Test #
 ########################### 
 
-if mode == "1":
+if ops_mode = "1":
     while True:
         reading = GPIO.input(pin)
         print("HIGH" if reading else "LOW")
@@ -110,7 +110,7 @@ if mode == "1":
 # Tone on Button Press: #
 #     Pull Up Wiring    #
 #########################
-elif mode == "2":
+elif ops_mode == "2":
     while True:
         wait_for_keydown(pin)
         tone_obj.play(-1) 		# -1 means to loop the sound 
@@ -121,7 +121,7 @@ elif mode == "2":
 # Display Morse and Play Tone: #
 #     Pull Up Wiring           #
 ################################
-elif mode == "3":
+elif ops_mode == "3":
     while True:
         wait_for_keydown(pin)
         key_down_time = time.time() # record the time when the key went down
@@ -139,7 +139,7 @@ elif mode == "3":
 # Decode Morse and Play Tone: #
 #     Pull Up Wiring          #
 ###############################
-elif mode == "4":
+elif ops_mode == "4":
 
     ####################
     # Start new thread #
