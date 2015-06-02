@@ -11,9 +11,11 @@ from array import array
 from pygame.locals import *
 from morse_lookup import *
 
-##############
-# GPIO Setup #
-##############
+##################
+# Hardware Setup #
+##################
+pygame.mixer.pre_init(44100, -16, 1, 1024)
+pygame.init()
 pin = 7
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -55,7 +57,7 @@ def decoder_thread():
             bit_string = "".join(buffer)
             try_decode(bit_string)
             del buffer[:]
-        elif new_word and key_up_length >- 4.5:
+        elif new_word and key_up_length >= 4.5:
             new_word = False
             sys.stdout.write(" ")
             sys.stdout.flush()
@@ -63,8 +65,6 @@ def decoder_thread():
 #########
 # Setup #
 #########
-pygame.mixer.pre_init(44100, -16, 1, 1024)
-pygame.init()
 tone_obj = ToneSound(frequency = 800, volume = .5)
 DOT = "."
 DASH = "-"
@@ -72,8 +72,6 @@ key_down_time=0
 key_down_length=0
 key_up_time = 0
 buffer = []
-		
-
 
 ##################################
 # Plays test tone upon execution #
@@ -88,6 +86,10 @@ tone_obj.stop()
 thread.start_new_thread(decoder_thread, ())
 
 print("Ready")
+
+#####################################################
+#                  Operation Modes                  #
+#####################################################
 
 ###########################
 # Contact Key Screen Test #
