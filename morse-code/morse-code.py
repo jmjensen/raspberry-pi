@@ -25,14 +25,23 @@ class ToneSound(pygame.mixer.Sound):
                 samples[time] = -amplitude
         return samples
 
+def wait_for_keydown(pin):
+    while GPIO.input(pin):
+        time.sleep(0.01)
+
+def wait_for_keyup(pin):
+    while not GPIO.input(pin):
+        time.sleep(0.01)
+		
+		
 tone_obj = ToneSound(frequency = 800, volume = .5)
 
 ##################################
 # Plays test tone upon execution #
 ##################################
-# tone_obj.play(-1) #the -1 means to loop the sound
-# time.sleep(2)
-# tone_obj.stop()
+tone_obj.play(-1) #the -1 means to loop the sound
+time.sleep(2)
+tone_obj.stop()
 
 ##############
 # GPIO Setup #
@@ -41,10 +50,22 @@ pin = 7
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+print("Ready")
+
 ###########################
 # Contact Key Screen Test #
 ########################### 
+# while True:
+	# reading = GPIO.input(pin)
+	# print("HIGH" if reading else "LOW")
+	# time.sleep(1)
+
+##########################
+# Tone on Button Press:  #
+#      Pull Up Wiring    #
+##########################
 while True:
-	reading = GPIO.input(pin)
-	print("HIGH" if reading else "LOW")
-	time.sleep(1)
+	wait_for_keydown(pin)
+	tone_obj.play(-1) 		# -1 means to loop the sound 
+	wait_for_keyup(pin)
+	tone_obj.stop()
