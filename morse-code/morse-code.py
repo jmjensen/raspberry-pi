@@ -43,7 +43,7 @@ GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 ###########################
 # Contact Key Screen Test #
-###########################
+########################### 
 while True:
 	reading = GPIO.input(pin)
 	print("HIGH" if reading else "LOW")
